@@ -1,5 +1,6 @@
 package ma.sieger.conferenceservice.mappers;
 
+import ma.sieger.conferenceservice.dtos.ConferenceRequestDTO;
 import ma.sieger.conferenceservice.dtos.ConferenceResponseDTO;
 import ma.sieger.conferenceservice.entities.Conference;
 import ma.sieger.conferenceservice.model.Keynote;
@@ -28,5 +29,17 @@ public class ConferenceMapper {
                         Collections.emptyList(),
                 keynote
         );
+    }
+
+    public Conference toEntity(ConferenceRequestDTO conferenceRequestDTO) {
+        return Conference.builder()
+                .title(conferenceRequestDTO.title())
+                .type(conferenceRequestDTO.type())
+                .date(conferenceRequestDTO.date())
+                .duration(conferenceRequestDTO.duration())
+                .keynoteId(conferenceRequestDTO.keynoteId())
+                .score(0.0)
+                .registeredCount(0)
+                .build();
     }
 }
