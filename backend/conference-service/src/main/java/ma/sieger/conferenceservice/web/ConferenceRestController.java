@@ -33,7 +33,7 @@ public class ConferenceRestController {
         return conferenceService.saveConference(conference);
     }
 
-    @PutMapping("/{id}/register") 
+    @PutMapping("/{id}/register")
     public ConferenceResponseDTO registerToConference(@PathVariable Long id) {
         return conferenceService.registerMember(id);
     }
