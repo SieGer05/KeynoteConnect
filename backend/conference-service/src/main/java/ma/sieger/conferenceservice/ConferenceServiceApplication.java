@@ -32,6 +32,7 @@ public class ConferenceServiceApplication {
                     .type("Academic")
                     .date(LocalDate.now())
                     .duration(60)
+                    .registeredCount(150)
                     .keynoteId(1L) // Amine SieGer
                     .build();
 
@@ -57,6 +58,7 @@ public class ConferenceServiceApplication {
                     .type("Commercial")
                     .date(LocalDate.now().plusDays(15)) // Dans le futur
                     .duration(90)
+                    .registeredCount(85)
                     .keynoteId(2L) // John Doe
                     .build();
 
@@ -76,6 +78,7 @@ public class ConferenceServiceApplication {
                     .type("Commercial")
                     .date(LocalDate.now().minusDays(5)) // Passée
                     .duration(45)
+                    .registeredCount(340)
                     .keynoteId(3L) // Sarah Connor
                     .build();
 

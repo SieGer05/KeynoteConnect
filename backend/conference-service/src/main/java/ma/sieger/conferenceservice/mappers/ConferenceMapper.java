@@ -23,6 +23,7 @@ public class ConferenceMapper {
                 conference.getType(),
                 conference.getDate(),
                 conference.getDuration(),
+                conference.getRegisteredCount(),
                 conference.getScore(),
                 conference.getReviews() != null ?
                         conference.getReviews().stream().map(reviewMapper::fromReview).toList() :
