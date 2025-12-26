@@ -78,6 +78,17 @@ public class ConferenceServiceImp implements ConferenceService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public ConferenceResponseDTO registerMember(Long id) {
+        Conference conference = conferenceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Conference not found"));
+
+        conference.setRegisteredCount(conference.getRegisteredCount() + 1);
+        conferenceRepository.save(conference);
+
+        return self.getConferenceById(id);
+    }
+
     private ConferenceResponseDTO mapConferenceToDTO(Conference conference) {
         calculateAndSetScore(conference);
         Keynote keynote = self.getKeynoteFromClient(conference.getKeynoteId());

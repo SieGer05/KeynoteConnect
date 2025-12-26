@@ -32,4 +32,9 @@ public class ConferenceRestController {
         Conference conference = conferenceMapper.toEntity(conferenceRequestDTO);
         return conferenceService.saveConference(conference);
     }
+
+    @PutMapping("/{id}/register") 
+    public ConferenceResponseDTO registerToConference(@PathVariable Long id) {
+        return conferenceService.registerMember(id);
+    }
 }

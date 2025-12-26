@@ -11,4 +11,5 @@ public interface ConferenceService {
     ConferenceResponseDTO getConferenceById(Long id);
     List<ConferenceResponseDTO> getAllConferences();
     Keynote getKeynoteFromClient(Long keynoteId);
+    ConferenceResponseDTO registerMember(Long id);
 }
