@@ -13,7 +13,20 @@ export const MOCK_CONFERENCES = [
          function: "Software Architect",
          email: "amine@sieger.ma"
       },
-      reviews: []
+      reviews: [
+         {
+            id: 101,
+            date: "2025-11-16",
+            text: "Excellente présentation, très claire !",
+            stars: 5
+         },
+         {
+            id: 102,
+            date: "2025-11-17",
+            text: "Un peu trop rapide sur la fin, mais bon contenu.",
+            stars: 4
+         }
+      ]
    },
    {
       id: 2,

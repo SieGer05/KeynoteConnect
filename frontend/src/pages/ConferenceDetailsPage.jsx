@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom"
 import { MOCK_CONFERENCES } from "../utils/mockData"
 import Badge from "../components/ui/Badge"
 import StarRating from "../components/ui/StartRating"
+import ReviewList from "../features/reviews/components/ReviewList"
 
 const ConferenceDetailsPage = () => {
    const { id } = useParams();
@@ -47,21 +48,14 @@ const ConferenceDetailsPage = () => {
 
             {/* Section Reviews */}
             <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
-               <h2 className="text-2xl font-bold text-slate-900 mb-6">Reviews & Feedback</h2>
+               <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-slate-900">Reviews & Feedback</h2>
+                  <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">
+                     {conference.reviews.length} reviews
+                  </span>
+               </div>
                
-               {/* Liste vide pour l'instant */}
-               {conference.reviews.length === 0 ? (
-                  <div className="text-center py-10 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                     <p className="text-slate-500 mb-2">No reviews yet.</p>
-                     <button className="text-indigo-600 font-semibold hover:underline">
-                        Be the first to write a review
-                     </button>
-                  </div>
-               ) : (
-                  <div className="space-y-4">
-                     {/* On mappera les reviews ici plus tard */}
-                  </div>
-               )}
+               <ReviewList reviews={conference.reviews} />
             </div>
          </div>
       </div>
