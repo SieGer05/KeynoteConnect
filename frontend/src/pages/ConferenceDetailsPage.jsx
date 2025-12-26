@@ -4,6 +4,7 @@ import { getConferenceById, addReview, registerToConference } from "../services/
 import Badge from "../components/ui/Badge";
 import ReviewList from "../features/reviews/components/ReviewList";
 import ReviewForm from "../features/reviews/components/ReviewForm";
+import keycloak from "../keycloak";
 
 const ConferenceDetailsPage = () => {
    const { id } = useParams();
@@ -20,9 +21,12 @@ const ConferenceDetailsPage = () => {
             const data = await getConferenceById(id);
             setConference(data);
 
-            const hasJoined = localStorage.getItem(`joined_${id}`);
-            if (hasJoined) {
-               setIsRegistered(true);
+            if (keycloak.authenticated) {
+               const userId = keycloak.subject; 
+               const hasJoined = localStorage.getItem(`joined_${userId}_${id}`);
+               if (hasJoined) {
+                  setIsRegistered(true);
+               }
             }
 
          } catch (err) {
@@ -36,6 +40,11 @@ const ConferenceDetailsPage = () => {
    }, [id]);
 
    const handleRegister = async () => {
+      if (!keycloak.authenticated) {
+         keycloak.login();
+         return;
+      }
+
       try {
          const updatedConf = await registerToConference(id);
          
@@ -45,7 +54,8 @@ const ConferenceDetailsPage = () => {
          }));
          setIsRegistered(true);
 
-         localStorage.setItem(`joined_${id}`, "true");
+         const userId = keycloak.subject;
+         localStorage.setItem(`joined_${userId}_${id}`, "true");
 
       } catch (err) {
          console.error(err);
@@ -150,7 +160,24 @@ const ConferenceDetailsPage = () => {
                </div>
                
                <ReviewList reviews={conference.reviews || []} />
-               <ReviewForm onAddReview={handleAddReview} />
+               {keycloak.authenticated ? (
+                  <ReviewForm onAddReview={handleAddReview} />
+               ) : (
+                  <div className="mt-8 bg-slate-50 rounded-xl p-8 text-center border border-slate-200 border-dashed">
+                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm text-2xl">
+                        💬
+                     </div>
+                     <h3 className="text-slate-900 font-medium text-lg">Want to share your thoughts?</h3>
+                     <p className="text-slate-500 mb-6">You need to be logged in to leave a review.</p>
+                  
+                     <button 
+                           onClick={() => keycloak.login()}
+                           className="bg-indigo-600 text-white px-6 py-2 rounded-full font-medium hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200 cursor-pointer"
+                     >
+                        Login to Review
+                     </button>
+                  </div>
+               )}
             </div>
          </div>
       </div>
