@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import ConferenceDetailsPage from "../pages/ConferenceDetailsPage";
 import CreateConferencePage from "../pages/CreateConferencePage";
+import CreateKeynotePage from "../pages/CreateKeynotePage";
 import PrivateRoute from "../components/utils/PrivateRoute";
 
 const AppRouter = () => {
@@ -14,6 +15,14 @@ const AppRouter = () => {
             element={
                <PrivateRoute roles={['ADMIN']}>
                   <CreateConferencePage />
+               </PrivateRoute>
+            } 
+         />
+         <Route 
+            path="/keynotes/new" 
+            element={
+               <PrivateRoute roles={['ADMIN']}>
+                  <CreateKeynotePage />
                </PrivateRoute>
             } 
          />

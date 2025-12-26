@@ -6,3 +6,8 @@ export const getAllKeynotes = async () => {
    const response = await api.get(SERVICE_PATH);
    return response.data;
 };
+
+export const createKeynote = async (keynoteData) => {
+   const response = await api.post(SERVICE_PATH, keynoteData);
+   return response.data;
+};
