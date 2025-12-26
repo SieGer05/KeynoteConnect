@@ -1,12 +1,33 @@
-import { useParams, Link } from "react-router-dom"
-import { MOCK_CONFERENCES } from "../utils/mockData"
-import Badge from "../components/ui/Badge"
-import StarRating from "../components/ui/StartRating"
-import ReviewList from "../features/reviews/components/ReviewList"
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { MOCK_CONFERENCES } from "../utils/mockData";
+import Badge from "../components/ui/Badge";
+import ReviewList from "../features/reviews/components/ReviewList";
+import ReviewForm from "../features/reviews/components/ReviewForm";
 
 const ConferenceDetailsPage = () => {
    const { id } = useParams();
-   const conference = MOCK_CONFERENCES.find((c) => c.id === parseInt(id));
+   
+   // État local pour gérer la conférence et permettre la mise à jour des reviews
+   const [conference, setConference] = useState(null);
+
+   useEffect(() => {
+      const foundConf = MOCK_CONFERENCES.find((c) => c.id === parseInt(id));
+      
+      if (foundConf) {
+         setConference({ ...foundConf, reviews: [...foundConf.reviews] });
+      }
+   }, [id]);
+
+   // Fonction pour gérer l'ajout d'une review
+   const handleAddReview = (newReview) => {
+      const reviewWithId = { ...newReview, id: Date.now() };
+      
+      setConference(prev => ({
+         ...prev,
+         reviews: [reviewWithId, ...prev.reviews]
+      }));
+   };
 
    if (!conference) {
       return <div className="text-center mt-20">Conference not found</div>;
@@ -55,11 +76,15 @@ const ConferenceDetailsPage = () => {
                   </span>
                </div>
                
+               {/* Liste des avis existants */}
                <ReviewList reviews={conference.reviews} />
+
+               {/* Formulaire d'ajout */}
+               <ReviewForm onAddReview={handleAddReview} />
             </div>
          </div>
       </div>
    );
 };
 
-export default ConferenceDetailsPage
+export default ConferenceDetailsPage;
