@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import logoImg from "../../assets/logo.png";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 const Navbar = () => {
   return (
@@ -19,12 +20,20 @@ const Navbar = () => {
                
                {/* Menu Droite */}
                <div className="flex items-center space-x-4">
-               <Link to="/" className="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors">
-                  Conferences
-               </Link>
-               <button className="bg-indigo-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200">
-                  Login
-               </button>
+                  <Link to="/" className="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors">
+                     Conferences
+                  </Link>
+
+                  <Link to="/conferences/new">
+                     <button className="bg-indigo-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200 flex items-center cursor-pointer">
+                        <PlusIcon className="w-4 h-4 mr-2 scale-110" />
+                        <span>New Conference</span>
+                     </button>
+                  </Link>
+
+                  <button className="bg-indigo-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200">
+                     Login
+                  </button>
                </div>
             </div>
          </div>
