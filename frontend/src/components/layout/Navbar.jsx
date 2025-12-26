@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logoImg from "../../assets/logo.png";
 
 const Navbar = () => {
   return (
@@ -8,9 +9,11 @@ const Navbar = () => {
                <div className="flex items-center">
                {/* Logo / Titre */}
                <Link to="/" className="flex items-center">
-                  <span className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
-                     SieGerConf
-                  </span>
+                  <img 
+                     src={logoImg} 
+                     alt="Logo" 
+                     className="h-10 w-auto object-contain"
+                  />
                </Link>
                </div>
                

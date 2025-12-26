@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
-import { MOCK_CONFERENCES } from '../../../utils/mockData';
+import { getAllConferences } from '../../../services/conferenceService';
 
 export const useConferences = () => {
-  const [conferences, setConferences] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+   const [conferences, setConferences] = useState([]);
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState(null);
 
-  useEffect(() => {
+   useEffect(() => {
       const fetchConferences = async () => {
          try {
             setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 500)); 
-            setConferences(MOCK_CONFERENCES);
+            const data = await getAllConferences();
+            setConferences(data);
          } catch (err) {
+            console.error("Erreur de connexion:", err);
             setError(err);
          } finally {
             setLoading(false);
