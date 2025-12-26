@@ -15,7 +15,7 @@ public class Review {
     private String text;
     private int stars;
 
-    @ManyToOne
+    @ManyToOne  
     @ToString.Exclude
     private Conference conference;
 }
