@@ -19,3 +19,8 @@ export const addReview = async (conferenceId, review) => {
    const response = await api.post(`/conferences/${conferenceId}/reviews`, review);
    return response.data;
 };
+
+export const registerToConference = async (id) => {
+   const response = await api.put(`/conferences/${id}/register`);
+   return response.data;
+};

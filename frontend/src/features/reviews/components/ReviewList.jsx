@@ -12,8 +12,8 @@ const ReviewList = ({ reviews }) => {
 
    return (
       <div className="space-y-1">
-         {reviews.map((review) => (
-         <ReviewItem key={review.id} review={review} />
+         {reviews.map((review, index) => (
+         <ReviewItem key={index} review={review} />
          ))}
       </div>
    );
