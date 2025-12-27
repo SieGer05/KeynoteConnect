@@ -159,7 +159,7 @@ const CreateConferencePage = () => {
                   <button
                      type="submit"
                      disabled={loading}
-                     className={`w-full py-4 rounded-2xl font-bold text-white shadow-xl shadow-indigo-200 transition-all active:scale-[0.98] ${
+                     className={`w-full py-4 rounded-2xl font-bold text-white shadow-xl shadow-indigo-200 transition-all active:scale-[0.98] cursor-pointer ${
                         loading 
                         ? "bg-indigo-400 cursor-not-allowed" 
                         : "bg-indigo-600 hover:bg-indigo-700"
@@ -180,7 +180,7 @@ const CreateConferencePage = () => {
                   <button 
                      type="button" 
                      onClick={() => navigate("/")} 
-                     className="w-full py-3 text-slate-500 font-bold hover:text-slate-800 transition-colors"
+                     className="w-full py-3 text-slate-500 font-bold hover:text-slate-800 transition-colors cursor-pointer"
                   >
                      Cancel
                   </button>

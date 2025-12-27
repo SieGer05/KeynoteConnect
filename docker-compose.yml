@@ -1,0 +1,123 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.4.7
+    container_name: keycloak
+    command: start-dev
+    ports:
+      - "8080:8080"
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_ENABLED=true
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    networks:
+      - sieger-net
+
+  keynote-discovery-service:
+    build: ./backend/discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - sieger-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      retries: 4
+      start_period: 40s
+
+  keynote-config-service:
+    build: ./backend/config-service
+    ports:
+      - "9999:9999"
+    environment:
+      - DISCOVERY_SERVICE_URL=http://keynote-discovery-service:8761/eureka
+    networks:
+      - sieger-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9999/actuator/health" ]
+      interval: 10s
+      retries: 4
+      start_period: 40s
+    depends_on:
+      keynote-discovery-service:
+        condition: service_healthy
+
+  keynote-keynote-service:
+    build: ./backend/keynote-service
+    ports:
+      - "8081:8081"
+    environment:
+      - DISCOVERY_SERVICE_URL=http://keynote-discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://keynote-config-service:9999
+      - KEYCLOAK_ISSUER_URI=http://localhost:8080/realms/sieger-realm
+      - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/sieger-realm/protocol/openid-connect/certs
+    networks:
+      - sieger-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 10s
+      retries: 4
+      start_period: 40s
+    depends_on:
+      keynote-config-service:
+        condition: service_healthy
+
+  keynote-conference-service:
+    build: ./backend/conference-service
+    ports:
+      - "8082:8082"
+    environment:
+      - DISCOVERY_SERVICE_URL=http://keynote-discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://keynote-config-service:9999
+      - KEYCLOAK_ISSUER_URI=http://localhost:8080/realms/sieger-realm
+      - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/sieger-realm/protocol/openid-connect/certs
+    networks:
+      - sieger-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
+      interval: 10s
+      retries: 4
+      start_period: 40s
+    depends_on:
+      keynote-keynote-service:
+        condition: service_healthy
+
+  keynote-gateway-service:
+    build: ./backend/gateway-service
+    ports:
+      - "8888:8888"
+    environment:
+      - DISCOVERY_SERVICE_URL=http://keynote-discovery-service:8761/eureka
+      - CONFIG_SERVICE_URL=http://keynote-config-service:9999
+      - KEYCLOAK_ISSUER_URI=http://localhost:8080/realms/sieger-realm
+      - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/sieger-realm/protocol/openid-connect/certs
+    networks:
+      - sieger-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 10s
+      retries: 4
+      start_period: 40s
+    depends_on:
+      keynote-config-service:
+        condition: service_healthy
+  
+  frontend-react:
+    build: ./frontend 
+    container_name: frontend-react
+    ports:
+      - "5173:80"
+    networks:
+      - sieger-net
+    depends_on:
+      keynote-gateway-service:
+        condition: service_healthy
+
+volumes:
+  keycloak_data:
+
+networks:
+  sieger-net:
+    driver: bridge
